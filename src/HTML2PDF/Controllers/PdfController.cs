@@ -18,7 +18,7 @@ namespace HTML2PDF.Controllers
         [HttpPost]
         public async Task<IActionResult> Create()
         {
-            byte[] bytes = await _pdfService.CreateAsync("<h1>dupa</h1>");
+            byte[] bytes = await _pdfService.CreateAsync("<h1>Hello World</h1>");
 
             if (!Directory.Exists(FileDirectory))
             {
