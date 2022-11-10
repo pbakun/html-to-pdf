@@ -33,6 +33,5 @@
     <None Update="Resources\img\invoice-logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>azor engine coe
-
+  </ItemGroup>
 </Project>
