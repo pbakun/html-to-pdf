@@ -1,4 +1,6 @@
-﻿using HTML2PDF.Service;
+﻿using HTML2PDF.Model.Template;
+using HTML2PDF.RazorEngine;
+using HTML2PDF.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HTML2PDF.Controllers
@@ -8,17 +10,23 @@ namespace HTML2PDF.Controllers
     public class PdfController : ControllerBase
     {
         private readonly IPdfService _pdfService;
+        private readonly IRazorService _razorService;
         public const string FileDirectory = "test";
 
-        public PdfController(IPdfService pdfService)
+        public PdfController(IPdfService pdfService, IRazorService razorService)
         {
             _pdfService = pdfService;
+            _razorService = razorService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(Invoice invoice)
         {
-            byte[] bytes = await _pdfService.CreateAsync("<h1>Hello World</h1>");
+            string path = Directory.GetCurrentDirectory() + "/Templates/Invoice.cshtml";
+            var razorTemplate = await System.IO.File.ReadAllTextAsync(path);
+
+            var html = _razorService.CreateHtml(invoice, razorTemplate);
+            byte[] bytes = await _pdfService.CreateAsync(html);
 
             if (!Directory.Exists(FileDirectory))
             {

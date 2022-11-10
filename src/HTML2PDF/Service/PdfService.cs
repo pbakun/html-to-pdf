@@ -12,7 +12,7 @@ namespace HTML2PDF.Service
         public async Task<byte[]> CreateAsync(string html)
         {
             using var playwright = await Playwright.CreateAsync();
-            await using var browser = await playwright.Chromium.LaunchAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
             var page = await browser.NewPageAsync();
             await page.EmulateMediaAsync(new PageEmulateMediaOptions { Media = Media.Screen });
             await page.SetContentAsync(html, new PageSetContentOptions() { WaitUntil = WaitUntilState.Load });

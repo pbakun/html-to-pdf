@@ -1,0 +1,131 @@
+﻿@using HTML2PDF.Model.Template
+@using HTML2PDF.RazorEngine.Templates
+@using System.Globalization
+
+@inherits RazorTemplate<Invoice>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			page {
+					background: white;
+					display: block;
+					margin: 1cm auto;
+					width: 21cm;
+					height: 27.7cm;
+					padding: 0 1cm !important;
+					position: relative;
+					page-break-after: always;
+                    font-family: Arial, Helvetica, sans-serif;
+				}
+
+            .heading {
+                text-align: center;
+            }
+
+            .contact {
+                margin: 25px 0;
+            }
+
+            .contact p {
+                margin: 0;
+                line-height: 1.3em;
+            }
+            .section-title {
+                font-size: 16px;
+                line-height: 1em;
+                margin-bottom: 2px;
+            }
+            .section-title_translation {
+                font-size: 12px;
+            }
+
+            .invoice-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+
+            table, th, td {
+                border: 1px solid #000;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th:first-of-type ,td:first-of-type {
+                min-width: 25px;
+                width: min-content;
+                text-align: left;
+            }
+            th:nth-of-type(2) ,td:nth-of-type(2) {
+                width: 70%;
+                text-align: left;
+            }
+            th:nth-of-type(3) ,td:nth-of-type(3) {
+                width: 15%;
+            }
+            th, td {
+                padding: 7px;
+                text-align: center;
+            }
+
+            .company-logo {
+                position: absolute;
+                right: 50px;
+                top: 30px;
+            }
+            .company-logo-img {
+                max-width: 150px;
+            }
+		</style>
+	</head>
+	<body>
+		<page>
+            <h2 class="heading">Invoice</h2>
+            <div class="company-logo">
+                <img class="company-logo-img" src="@ConvertImageBase64String("./Resources/img/invoice-logo.png")" />
+            </div>
+			<div class="contact">
+                <div class="section-title">
+                    Seller:
+                </div>
+				<p>@Model.Entrepreneur.Fullname</p>
+				<p>@Raw(Model.Entrepreneur.Address)</p>
+				<p>@Model.Entrepreneur.PostalCode @Model.Entrepreneur.City</p>
+			</div>
+            <div class="contact">
+                <div class="section-title">
+                    Recipient:
+                </div>
+				<p>@Model.Recipient.Fullname</p>
+				<p>@Raw(Model.Recipient.Address)</p>
+				<p>@Model.Recipient.PostalCode @Model.Recipient.City</p>
+			</div>
+
+            <div class="invoice-meta">
+                <div class="invoice-no">
+                    Invoice Nr: @Raw(Model.InvoiceNo)
+                </div>
+                <div class="invoice-date">@Raw(FormatDate(Model.InvoiceDate))</div>
+            </div>
+            <table class="invoice-table">
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Count</th>
+                        <th>Price (EUR)</th>
+                    </tr>
+                    @foreach(var (entry, index) in Model.InvoiceEntries.Select((value, i) => (value, i)))
+                    {
+                        <tr>
+                            <td>@Raw(index+1).</td>
+                            <td>@Raw(entry.Name)</td>
+                            <td>@Raw(entry.Count)</td>
+                            <td>@Raw(entry.Price)</td>
+                        </tr>
+                    }
+            </table>
+		</page>
+	</body>
+</html>

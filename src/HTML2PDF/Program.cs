@@ -1,3 +1,4 @@
+using HTML2PDF.RazorEngine;
 using HTML2PDF.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IPdfService, PdfService>();
+builder.Services.AddRazorEngineService();
 
 var app = builder.Build();
 
